@@ -1,4 +1,4 @@
-type Note @model {
+type Note @aws_api_key @aws_iam {
   id: ID!
   name: String!
   description: String
