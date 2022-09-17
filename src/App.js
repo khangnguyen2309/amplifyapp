@@ -1,4 +1,7 @@
-import { withAuthenticator } from '@aws-amplify/ui-react';
+import { 
+  withAuthenticator, TextField, Flex, Button, 
+  Table, TableCell, TableBody, TableHead,TableRow, 
+} from '@aws-amplify/ui-react';
 import "@aws-amplify/ui-react/styles.css";
 import React, { useEffect, useState } from 'react';
 import './App.css';
@@ -54,37 +57,78 @@ function App({ signOut }) {
   }
   return (
     <div className="App">
-      <h1>My Notes App</h1>
-      <input
-        type="file"
-        onChange={onChange}
-      />
-      <input
-        onChange={e => setFormData({ ...formData, 'name': e.target.value})}
-        placeholder="Note name"
-        value={formData.name}
-      />
-      <input
-        onChange={e => setFormData({ ...formData, 'description': e.target.value})}
-        placeholder="Note description"
-        value={formData.description}
-      />
-      <button onClick={createNote}>Create Note</button>
-      <div style={{marginBottom: 30}}>
-      {
-        notes.map(note => (
-          <div key={note.id || note.name}>
-            <h2>{note.name}</h2>
-            <p>{note.description}</p>
-            <button onClick={() => deleteNote(note)}>Delete note</button>
-            {
-              note.image && <img src={note.image} style={{width: 400}} />
-            }
-          </div>
-        ))
-      }
-      </div>
-      <button onClick={signOut}>Sign Out</button>
+      <Flex 
+        direction="row"
+        justifyContent="space-between"
+        gap="1rem"
+        padding="1rem"
+      >
+        <h1>My Notes App</h1>
+        <div> 
+          <button onClick={signOut}>Sign Out</button>
+        </div>
+      </Flex>
+      <Flex
+        direction="row"
+        justifyContent="flex-start"
+        alignItems="stretch"
+        alignContent="flex-start"
+        wrap="nowrap"
+        gap="1rem"
+        padding="1rem"
+      >
+        <input
+          type="file"
+          onChange={onChange}
+        />
+        <TextField
+          labelHidden
+          onChange={e => setFormData({ ...formData, 'name': e.target.value})}
+          placeholder="Note name"
+          value={formData.name}
+        />
+
+        <TextField
+          labelHidden
+          onChange={e => setFormData({ ...formData, 'description': e.target.value})}
+          placeholder="Note description"
+          value={formData.description}
+        />
+        <div> 
+          <Button
+            loadingText=""
+            onClick={createNote}
+            ariaLabel=""
+          >
+            Create Note
+          </Button>
+        </div>
+      </Flex>
+      
+      <Table highlightOnHover={true}>
+        <TableHead>
+          <TableRow>
+            <TableCell as="th">Note Name</TableCell>
+            <TableCell as="th">Description</TableCell>
+            <TableCell as="th">Image</TableCell>
+            <TableCell as="th">Action</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {
+            notes.map(note => (
+              <TableRow key={note.id || note.name}>
+                <TableCell style={{ verticalAlign: `top` }}>{note.name}</TableCell>
+                <TableCell style={{ verticalAlign: `top` }}>{note.description}</TableCell>
+                <TableCell style={{ verticalAlign: `top` }}>{
+                  note.image && <img src={note.image} style={{width: 400}} />
+                }</TableCell>
+                <TableCell style={{ verticalAlign: `top` }}><button onClick={() => deleteNote(note)}>Delete note</button></TableCell>
+              </TableRow>
+            ))
+          }
+        </TableBody>
+      </Table>
     </div>
   );
 }
